@@ -1,6 +1,6 @@
-using REPLACE_PKG
+using IABCosmo
 using Test
 
-@testset "REPLACE_PKG.jl" begin
+@testset "IABCosmo.jl" begin
     # Write your tests here.
 end
