@@ -1,5 +1,5 @@
-name = "REPLACE_PKG"
-uuid = "a50c839e-1b84-4575-b48f-4fda80ec5e07"
+name = "IABCosmo"
+uuid = "219f2364-07ce-446b-bd8c-94fe9c7db6e0"
 authors = ["Patrick Armstrong <patrick.armstrong@anu.edu.au> and contributors"]
 version = "0.1.0"
 

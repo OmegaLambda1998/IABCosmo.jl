@@ -1,4 +1,4 @@
-# REPLACE_PKG Documentation
+# IABCosmo Documentation
 
 ```@contents
 ```
@@ -6,4 +6,4 @@
 ## Install
 ```
 using Pkg
-Pkg.add("REPLACE_PKG")
+Pkg.add("IABCosmo")
