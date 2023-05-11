@@ -1,11 +1,13 @@
-name = "REPLACE_PKG"
-uuid = "a50c839e-1b84-4575-b48f-4fda80ec5e07"
+name = "IABCosmo"
+uuid = "219f2364-07ce-446b-bd8c-94fe9c7db6e0"
 authors = ["Patrick Armstrong <patrick.armstrong@anu.edu.au> and contributors"]
 version = "0.1.0"
 
 [deps]
 ArgParse = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
 BetterInputFiles = "c0b1955d-4702-4680-a946-720482e78a48"
+JLACovarianceMatrix = "1864ff84-3b4e-4d7f-814d-d6a9c467c6cf"
+SALTJacobian = "23497e12-9a2b-4937-962e-9e86ac9c79a7"
 TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 
 [compat]

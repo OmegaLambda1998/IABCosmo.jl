@@ -1,4 +1,4 @@
-module REPLACE_PKG
+module IABCosmo
 
 # External packages
 using TOML
@@ -7,12 +7,12 @@ using ArgParse
 
 # Internal Packages
 include("RunModule.jl")
-using .RunModule: run_REPLACE_PKG
+using .RunModule: run_IABCosmo
 
 # Exports
 export main 
 
-Base.@ccallable function julia_main()::Cint
+function julia_main()::Cint
     try
         main()
     catch
@@ -40,7 +40,7 @@ function main()
     verbose = args["verbose"]
     toml_path = args["input"]
     toml = setup_input(toml_path, verbose)
-    run_REPLACE_PKG(toml)
+    run_IABCosmo(toml)
 end
 
 if abspath(PROGRAM_FILE) == @__FILE__
