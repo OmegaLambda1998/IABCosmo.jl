@@ -1,0 +1,15 @@
+[ global ]
+    output_path = "../../Outputs/DESForwardModel"
+
+<include DESCovarianceMatrix.toml>
+
+<include DESJacobian.toml>
+
+[ sim ]
+    pippin_template = "DESTemplate.yml"
+    [ sim.config.priors ]
+        Om.distribution = "Uniform"
+        Om.args = [0, 1]
+
+        w0.distribution = "Normal"
+        w0.args = [-1.0, 1.0]
