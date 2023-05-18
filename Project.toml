@@ -7,8 +7,10 @@ version = "0.1.0"
 ArgParse = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
 BetterInputFiles = "c0b1955d-4702-4680-a946-720482e78a48"
 JLACovarianceMatrix = "1864ff84-3b4e-4d7f-814d-d6a9c467c6cf"
+OrderedCollections = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 SALTJacobian = "23497e12-9a2b-4937-962e-9e86ac9c79a7"
 TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
 
 [compat]
 julia = "1"
