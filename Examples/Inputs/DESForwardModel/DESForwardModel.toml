@@ -6,10 +6,13 @@
 <include DESJacobian.toml>
 
 [ sim ]
-    pippin_template = "DESTemplate.yml"
+    simulate = 1
+    pippin_template = "PA_DESForwardModel.yml"
     [ sim.config.priors ]
         Om.distribution = "Uniform"
         Om.args = [0, 1]
+        Om.init = 0.3
 
         w0.distribution = "Normal"
         w0.args = [-1.0, 1.0]
+        w0.init = -1.0

@@ -1,0 +1,76 @@
+ALIAS:
+    GRID_G10: &grid_g10
+        GENSIGMA_SALT2ALPHA: 1E8  1E8
+        GENRANGE_SALT2ALPHA: 0.12 0.20
+        GENGRID_SALT2ALPHA: 2
+        GENSIGMA_SALT2BETA: 1E8  1E8
+        GENRANGE_SALT2BETA: 2.6  3.6
+        GENGRID_SALT2BETA: 2
+
+    BIASCOR_SIZE: &biascor_size
+        NGEN_UNIT: 5
+        RANSEED_REPEAT: 75 12345
+        BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 75
+        BATCH_MEM: 8000
+
+    DES_G10_INPUTS: &des_g10_inputs
+        BASE: /project2/rkessler/PRODUCTS/pippin/data_files/surveys/des/sims_ia/sn_ia_salt2_g10_des3yr.input
+
+    DATASIM_SIZE: &datasim_size
+        NGEN_UNIT: 1
+        RANSEED_REPEAT: 50 12345
+        BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 50
+        BATCH_MEM: 8000
+
+    SALTMODEL: &saltmodel
+        GENMODEL: <%saltmodel> 
+    SALTFIT: &saltfit
+        FITMODEL_NAME: <%saltmodel> 
+
+SIM:
+    DATASIM_G10:
+        IA_G10:
+            <<: *des_g10_inputs 
+            <<: *saltmodel 
+        GLOBAL:
+            <<: *datasim_size
+                
+    DATASIM_G10_BIASCOR:
+        IA_G10:
+            <<: *des_g10_inputs 
+            <<: *grid_g10
+            <<: *saltmodel 
+        GLOBAL:
+            <<: *biascor_size
+
+LCFIT:
+    DSIM:
+        BASE: /project2/rkessler/PRODUCTS/pippin/data_files/surveys/des/lcfit_nml/des_3yr.nml
+        MASK: SIM
+        FITINP:
+            <<: *saltfit
+
+AGGREGATION:
+    AGG:
+
+MERGE:
+    MERGE:
+
+BIASCOR:
+    3YR:
+        BASE: /project2/rkessler/PRODUCTS/pippin/data_files/surveys/des/bbc/bbc_3yr.input
+        DATA: [DSIM_DATASIM_G10]
+        SIMFILE_BIASCOR: [DSIM_DATASIM_G10_BIASCOR]
+
+CREATE_COV:
+    COV:
+        MASK: 3YR
+
+COSMOFIT:
+    WFIT:
+        SN_OMW:
+            MASK: COV 
+            OPTS:
+                BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 50
+                WFITOPTS:
+                    - /om_no_prior/ -ompri 0.3 -dompri 50 -outfile_chi2grid chi2.txt -minchi2 -omsteps 201 -w0steps 301

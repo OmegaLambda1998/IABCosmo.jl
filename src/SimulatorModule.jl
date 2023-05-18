@@ -11,7 +11,9 @@ using SALTJacobian
 
 struct Simulation
     covariance_matrix::CovarianceMatrix
-    
+    jacobian::Jacobian    
 end
+
+
 
 end
