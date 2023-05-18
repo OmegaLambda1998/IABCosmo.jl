@@ -21,7 +21,7 @@ end
 
 function Simulator(config::Dict{String,Any}, covariance_matrix::CovarianceMatrix, jacobian::Jacobian)
     pippin_template_input = config["PIPPIN_TEMPLATE"]
-    pippin_template = YAML.loadfile(abspath(pippin_template_input); dicttype=OrderedDict{String,Any})
+    pippin_template = YAML.load_file(abspath(pippin_template_input); dicttype=OrderedDict{String,Any})
     @show pippin_template
     return Simulator(pippin_template, covariance_matrix, jacobian)
 end
