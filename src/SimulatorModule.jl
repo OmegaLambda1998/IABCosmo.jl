@@ -30,6 +30,7 @@ function Simulator(config::Dict{String,Any}, covariance_matrix::CovarianceMatrix
 end
 
 function simulate(simulator::Simulator, sim_num::Int64)
+    return nothing
 end
 
 end
