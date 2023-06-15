@@ -44,6 +44,9 @@ end
 function prepare_simulator(toml::Dict{String, Any}, covariance_matrix::CovarianceMatrix, jacobian::Jacobian)
     simulator = Simulator(toml["SIM"], covariance_matrix, jacobian, toml["GLOBAL"])
     num_sims = get(toml["SIM"], "SIMULATE", 0)
+    if num_sims > 0
+        @info "Creating $num_sims simulations"
+    end
     for sim in 1:num_sims
         simulate(simulator, sim)
     end
