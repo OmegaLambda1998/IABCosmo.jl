@@ -6,7 +6,7 @@
 <include DESJacobian.toml>
 
 [ sim ]
-    simulate = 1
+    simulate = 2
     pippin_template = "PA_DESForwardModel.yml"
     [ sim.config.priors ]
         Om.distribution = "Uniform"

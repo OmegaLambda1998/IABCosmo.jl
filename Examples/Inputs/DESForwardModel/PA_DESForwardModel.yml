@@ -22,33 +22,33 @@ ALIAS:
         BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 50
         BATCH_MEM: 8000
 
-    SALTMODEL_<%n>: &saltmodel_<%n>
-        GENMODEL: <%saltmodel_n> 
-    SALTFIT_<%n>: &saltfit_<%n>
-        FITMODEL_NAME: <%saltmodel_n> 
+    GENMODEL__n__: &genmodel__n__
+        GENMODEL: __saltmodel____n__
+    SALTFIT__n__: &saltfit__n__
+        FITMODEL_NAME: __saltmodel____n__
 
 SIM:
-    DATASIM_G10_<%n>:
+    DATASIM_G10__n__:
         IA_G10:
             <<: *des_g10_inputs 
-            <<: *saltmodel_<%n>
+            <<: *genmodel__n__
         GLOBAL:
             <<: *datasim_size
                 
-    DATASIM_G10_BIASCOR_<%n>:
+    DATASIM_G10_BIASCOR__n__:
         IA_G10:
             <<: *des_g10_inputs 
             <<: *grid_g10
-            <<: *saltmodel_<%n>
+            <<: *genmodel__n__
         GLOBAL:
             <<: *biascor_size
 
 LCFIT:
-    DSIM_<%n>:
+    DSIM__n__:
         BASE: /project2/rkessler/PRODUCTS/pippin/data_files/surveys/des/lcfit_nml/des_3yr.nml
         MASK: SIM
         FITINP:
-            <<: *saltfit_<%n>
+            <<: *saltfit__n__
 
 AGGREGATION:
     AGG:
@@ -57,10 +57,10 @@ MERGE:
     MERGE:
 
 BIASCOR:
-    3YR_<%n>:
+    3YR__n__:
         BASE: /project2/rkessler/PRODUCTS/pippin/data_files/surveys/des/bbc/bbc_3yr.input
-        DATA: [DSIM_<%n>_DATASIM_G10_<%n>]
-        SIMFILE_BIASCOR: [DSIM_<%n>_DATASIM_G10_BIASCOR_<%n>]
+        DATA: [DSIM__n___DATASIM_G10__n__]
+        SIMFILE_BIASCOR: [DSIM__n___DATASIM_G10_BIASCOR__n__]
 
 CREATE_COV:
     COV:
