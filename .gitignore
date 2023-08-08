@@ -2,3 +2,5 @@
 /Examples/Outputs/
 /prepare_pkg.py
 **/*T21Suite*
+/statprof/
+/doc/build/

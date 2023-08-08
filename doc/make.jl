@@ -9,6 +9,7 @@ makedocs(
     modules = [IABCosmo],
     pages = [
         "IABCosmo" => "index.md",
+        "API" => "api.md"
     ],
     format = Documenter.HTML(
         assets = ["assets/favicon.ico"],

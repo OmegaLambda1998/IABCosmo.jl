@@ -22,16 +22,11 @@ ALIAS:
         BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 50
         BATCH_MEM: 8000
 
-    GENMODEL__n__: &genmodel__n__
-        GENMODEL: __saltmodel____n__
-    SALTFIT__n__: &saltfit__n__
-        FITMODEL_NAME: __saltmodel____n__
-
 SIM:
     DATASIM_G10__n__:
         IA_G10:
+            GENMODEL: __saltmodel____n__ 
             <<: *des_g10_inputs 
-            <<: *genmodel__n__
         GLOBAL:
             <<: *datasim_size
                 
@@ -39,7 +34,7 @@ SIM:
         IA_G10:
             <<: *des_g10_inputs 
             <<: *grid_g10
-            <<: *genmodel__n__
+            GENMODEL: __saltmodel____n__ 
         GLOBAL:
             <<: *biascor_size
 
@@ -48,7 +43,7 @@ LCFIT:
         BASE: /project2/rkessler/PRODUCTS/pippin/data_files/surveys/des/lcfit_nml/des_3yr.nml
         MASK: SIM
         FITINP:
-            <<: *saltfit__n__
+            FITMODEL_NAME: __saltmodel____n__
 
 AGGREGATION:
     AGG:
