@@ -6,9 +6,15 @@
 <include DESJacobian.toml>
 
 [ sim ]
-    simulate = 2
+    presimulate = 2
     pippin_template = "PA_DESForwardModel.yml"
-    [ sim.config.priors ]
+
+    [ sim.draw ] # Options for drawing from JLACovarianceMatrix
+        SURVEY_LIST_SAMEMAGSYS = ["CFA3", "OTHER", "CALAN_TOLOLO"] 
+        SURVEY_LIST_SAMEFILTER = ["CFA1", "CFA2", "CFA3", "CALAN_TOLOLO"]
+        shift_map = {"CfA1" = "MAGSHIFT", "CfA2" = "MAGSHIFT"}
+
+    [ sim.priors ]
         Om.distribution = "Uniform"
         Om.args = [0, 1]
         Om.init = 0.3
