@@ -49,7 +49,14 @@ function get_salt_models(covariance_matrix::CovarianceMatrix, jacobian::Jacobian
     name = get(draw_config, "NAME", "SALT_MODEL")
     options = [Dict{String,Any}("NAME" => name * "_$i", "MODE" => "combine", "TRAINOPTS" => trainopts[i]) for i in eachindex(trainopts)]
     surfaces = SALTJacobian.RunModule.surfaces_stage(options, jacobian, global_config)
-    return Dict{String,Any}(joinpath(global_config["OUTPUT_PATH"], "$(name)_$(i)", "TRAINOPT001.tar.gz") => surface for (i, surface) in enumerate(surfaces))
+    paths = [joinpath(global_config["OUTPUT_PATH"], "$(name)_$(i)", "TRAINOPT001.tar.gz") for i in eachindex(surfaces)]
+    for (i, path) in enumerate(paths)
+        tmp_path = SALTJacobian.RunModule.ToolModule.uncompress(path)
+        uncompressed_path = joinpath(dirname(path), "TRAINOPT001/")
+        mv(tmp_path, uncompressed_path, force=true)
+        paths[i] = uncompressed_path 
+    end
+    return paths
 end
 
 function fix_n(pippin_template::OrderedDict{String,Any}, n::Int64)
@@ -131,7 +138,7 @@ function Simulator(config::Dict{String,Any}, covariance_matrix::CovarianceMatrix
     draw_config = get(config, "DRAW", Dict{String,Any}())
     salt_models = get_salt_models(covariance_matrix, jacobian, num_sims, draw_config, global_config)
     pippin_template = YAML.load_file(abspath(pippin_template_input); dicttype=OrderedDict{String,Any})
-    pippin_template = prep_template(pippin_template, collect(keys(salt_models)), num_sims)
+    pippin_template = prep_template(pippin_template, salt_models, num_sims)
     output = joinpath(global_config["OUTPUT_PATH"], basename(pippin_template_input))
     @info "Saving pippin template to $output"
     YAML.write_file(output, pippin_template)
