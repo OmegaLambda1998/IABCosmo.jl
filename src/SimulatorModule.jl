@@ -47,9 +47,9 @@ function get_salt_models(covariance_matrix::CovarianceMatrix, jacobian::Jacobian
     offsets = draw_covariance_matrix(covariance_matrix, draw_config)
     trainopts = offsets_to_trainopts(offsets..., get(draw_config, "SHIFT_MAP", Dict{String,Any}()))
     name = get(draw_config, "NAME", "SALT2.JACOBIAN")
-    options = [Dict{String,Any}("NAME" => name * "_$i", "MODE" => "combine", "TRAINOPTS" => trainopts[i]) for i in eachindex(trainopts)]
+    options = [Dict{String,Any}("NAME" => "SALT_MODELS/$(name)_$i", "MODE" => "combine", "TRAINOPTS" => trainopts[i]) for i in eachindex(trainopts)]
     surfaces = SALTJacobian.RunModule.surfaces_stage(options, jacobian, global_config)
-    paths = [joinpath(global_config["OUTPUT_PATH"], "$(name)_$(i)", "TRAINOPT001.tar.gz") for i in eachindex(surfaces)]
+    paths = [joinpath(global_config["OUTPUT_PATH"], "SALT_MODELS", "$(name)_$(i)", "TRAINOPT001.tar.gz") for i in eachindex(surfaces)]
     for (i, path) in enumerate(paths)
         tmp_path = SALTJacobian.RunModule.ToolModule.uncompress(path)
         uncompressed_path = dirname(path)
