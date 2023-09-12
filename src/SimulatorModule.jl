@@ -52,7 +52,7 @@ function get_salt_models(covariance_matrix::CovarianceMatrix, jacobian::Jacobian
     paths = [joinpath(global_config["OUTPUT_PATH"], "$(name)_$(i)", "TRAINOPT001.tar.gz") for i in eachindex(surfaces)]
     for (i, path) in enumerate(paths)
         tmp_path = SALTJacobian.RunModule.ToolModule.uncompress(path)
-        uncompressed_path = joinpath(dirname(path), "TRAINOPT001/")
+        uncompressed_path = dirname(path)
         mv(tmp_path, uncompressed_path, force=true)
         paths[i] = uncompressed_path
     end
