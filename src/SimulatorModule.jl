@@ -15,6 +15,7 @@ export simulate
 
 struct Simulator
     pippin_template::OrderedDict{String,Any}
+    pippin_output::AbstractString
     covariance_matrix::CovarianceMatrix
     jacobian::Jacobian
 end
@@ -129,24 +130,59 @@ function prep_template(pippin_template::OrderedDict{String,Any}, paths::Vector{S
     return pippin_template
 end
 
+function save_pippin_template(pippin_template::OrderedDict{String,Any}, output::AbstractString)
+    @info "Saving pippin template to $output"
+    YAML.write_file(output, pippin_template)
+end
+
 function Simulator(config::Dict{String,Any}, covariance_matrix::CovarianceMatrix, jacobian::Jacobian, global_config::Dict{String,Any})
     pippin_template_input = config["PIPPIN_TEMPLATE"]
     if !isabspath(pippin_template_input)
         pippin_template_input = joinpath(global_config["BASE_PATH"], pippin_template_input)
     end
-    num_sims = get(config, "PRESIMULATE", 0)
+    num_sims = get(config, "NUM_SIMS", 0)
     draw_config = get(config, "DRAW", Dict{String,Any}())
     salt_models = get_salt_models(covariance_matrix, jacobian, num_sims, draw_config, global_config)
     pippin_template = YAML.load_file(abspath(pippin_template_input); dicttype=OrderedDict{String,Any})
     pippin_template = prep_template(pippin_template, salt_models, num_sims)
     output = joinpath(global_config["OUTPUT_PATH"], basename(pippin_template_input))
-    @info "Saving pippin template to $output"
-    YAML.write_file(output, pippin_template)
-    return Simulator(pippin_template, covariance_matrix, jacobian)
+    simulator = Simulator(pippin_template, output, covariance_matrix, jacobian)
+    save_pippin_template(simulator.pippin_template, output)
+    return simulator
 end
 
-function simulate(simulator::Simulator, sim_num::Int64)
-    return nothing
+function update_cosmology(pippin_template::OrderedDict{String,Any}, w::Float64=-1.0, om::Float64=0.3, ol::Float64=1 - om)
+    for (key, value) in pippin_template
+        pippin_template[key] = update_cosmology(value, w, om, ol)
+    end
+    return pippin_template
+end
+
+function update_cosmology(value::String, w::Float64, om::Float64, ol::Float64)
+    if contains(value, "__w__")
+        return w
+    elseif contains(value, "__om__")
+        return om
+    elseif contains(value, "__ol__")
+        return ol
+    else
+        return value
+    end
+end
+
+function update_cosmology(value::Vector, w::Float64, om::Float64, ol::Float64)
+    return update_cosmology.(value, w, om, ol)
+end
+
+function update_cosmology(value, ::Float64, ::Float64, ::Float64)
+    return value
+end
+
+function simulate(simulator::Simulator, w::Float64=-1.0, om::Float64=0.3, ol::Float64=1 - om)
+    pippin_template = update_cosmology(deepcopy(simulator.pippin_template), w, om, ol)
+    save_pippin_template(pippin_template, simulator.pippin_output)
+    command = Cmd(`pippin.sh -v $(simulator.pippin_output)`)
+    run(command; wait=true)
 end
 
 end

@@ -44,23 +44,13 @@ function get_jacobian(toml::Dict{String,Any})
     return jacobian
 end
 
-function prepare_simulator(toml::Dict{String,Any}, covariance_matrix::CovarianceMatrix, jacobian::Jacobian)
-    simulator = Simulator(toml["SIM"], covariance_matrix, jacobian, toml["GLOBAL"])
-    num_sims = get(toml["SIM"], "SIMULATE", 0)
-    if num_sims > 0
-        @info "Creating $num_sims simulations"
-    end
-    # Won't run if num_sims == 0
-    for sim in 1:num_sims
-        simulate(simulator, sim)
-    end
-
-end
-
 function run_IABCosmo(toml::Dict{String,Any})
     covariance_matrix = get_covariance_matrix(toml)
     jacobian = get_jacobian(toml)
-    simulator = prepare_simulator(toml, covariance_matrix, jacobian)
+    simulator = Simulator(toml["SIM"], covariance_matrix, jacobian, toml["GLOBAL"])
+    if get(toml["SIM"], "NUM_SIMS", 0) > 0
+        simulate(simulator)
+    end
 end
 
 end

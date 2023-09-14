@@ -6,7 +6,7 @@
 <include DESJacobian.toml>
 
 [ sim ]
-    presimulate = 2
+    num_sims = 2
     pippin_template = "PA_DESForwardModel.yml"
 
     [ sim.draw ] # Options for drawing from JLACovarianceMatrix

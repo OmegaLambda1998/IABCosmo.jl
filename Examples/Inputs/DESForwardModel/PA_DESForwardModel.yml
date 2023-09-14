@@ -22,6 +22,11 @@ ALIAS:
         BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 50
         BATCH_MEM: 8000
 
+    COSMOLOGY: &cosmology
+        W0_LAMBDA: __w__
+        OMEGA_MATTER: __om__
+        OMEGA_LAMBDA: __ol__
+
 SIM:
     DATASIM_G10__n__:
         IA_G10:
@@ -29,6 +34,7 @@ SIM:
             <<: *des_g10_inputs 
         GLOBAL:
             <<: *datasim_size
+            <<: *cosmology
                 
     DATASIM_G10_BIASCOR__n__:
         IA_G10:
@@ -37,6 +43,7 @@ SIM:
             GENMODEL: __saltmodel____n__ 
         GLOBAL:
             <<: *biascor_size
+            <<: *cosmology
 
 LCFIT:
     DSIM__n__:
@@ -56,6 +63,9 @@ BIASCOR:
         BASE: /project2/rkessler/PRODUCTS/pippin/data_files/surveys/des/bbc/bbc_3yr.input
         DATA: [DSIM__n___DATASIM_G10__n__]
         SIMFILE_BIASCOR: [DSIM__n___DATASIM_G10_BIASCOR__n__]
+        OPTS:
+          sigint_biascor: 0
+          BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 50
 
 CREATE_COV:
     COV:
