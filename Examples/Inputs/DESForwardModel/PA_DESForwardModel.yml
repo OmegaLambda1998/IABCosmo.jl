@@ -48,7 +48,13 @@ SIM:
 LCFIT:
     DSIM__n__:
         BASE: /project2/rkessler/PRODUCTS/pippin/data_files/surveys/des/lcfit_nml/des_3yr.nml
-        MASK: SIM
+        MASK: DATASIM_G10__n__
+        FITINP:
+            FITMODEL_NAME: __saltmodel____n__
+
+    DSIM_BIAS__n__:
+        BASE: /project2/rkessler/PRODUCTS/pippin/data_files/surveys/des/lcfit_nml/des_3yr.nml
+        MASK: DATASIM_G10_BIASCOR__n__
         FITINP:
             FITMODEL_NAME: __saltmodel____n__
 
@@ -62,7 +68,7 @@ BIASCOR:
     3YR__n__:
         BASE: /project2/rkessler/PRODUCTS/pippin/data_files/surveys/des/bbc/bbc_3yr.input
         DATA: [DSIM__n___DATASIM_G10__n__]
-        SIMFILE_BIASCOR: [DSIM__n___DATASIM_G10_BIASCOR__n__]
+        SIMFILE_BIASCOR: [DSIM_BIAS__n___DATASIM_G10_BIASCOR__n__]
         OPTS:
           sigint_biascor: 0
           BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 50
