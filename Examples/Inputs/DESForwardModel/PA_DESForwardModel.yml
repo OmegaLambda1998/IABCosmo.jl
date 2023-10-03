@@ -30,8 +30,10 @@ ALIAS:
 SIM:
     DATASIM_G10__n__:
         IA_G10:
-            GENMODEL: __saltmodel____n__ 
             <<: *des_g10_inputs 
+            GENMODEL: __saltmodel____n__ 
+            GENMAG_OFF_ZP: __zp_offset____n__
+            GENMAG_OFF_MODEL: __mag_offset____n__
         GLOBAL:
             <<: *datasim_size
             <<: *cosmology
@@ -41,6 +43,8 @@ SIM:
             <<: *des_g10_inputs 
             <<: *grid_g10
             GENMODEL: __saltmodel____n__ 
+            GENMAG_OFF_ZP: __zp_offset____n__
+            GENMAG_OFF_MODEL: __mag_offset____n__
         GLOBAL:
             <<: *biascor_size
             <<: *cosmology

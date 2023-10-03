@@ -1,16 +1,16 @@
 [ CovarianceMatrix ]
 
-    #[ CovarianceMatrix.Instrument.DES ]
-    #    Astrometry = 0.001
-    #    NonLinearity = 0.001
-    #    PhotometricZeroPointing = 0.002
-    #    PhotometricBias = 0.003
-    #    Uniformity = 0.00381 # 0.0066 / √3
-    #    Filters =               ["g",   "r",    "i",    "z"]
-    #    ABUncertainty =         [0.002, 0.002,  0.001,  0.005]
-    #    SuperCalCorrection =    [0.0,   0.0,    0.0,    0.0]
-    #    FilterUncertainty =     [0.6,   0.6,    0.6,    0.6]
-    #    CentralWavelength =     [481,   644,    781,    913]
+    [ CovarianceMatrix.Instrument.DES ]
+        Astrometry = 0.001
+        NonLinearity = 0.001
+        PhotometricZeroPointing = 0.002
+        PhotometricBias = 0.003
+        Uniformity = 0.00381 # 0.0066 / √3
+        Filters =               ["g",   "r",    "i",    "z"]
+        ABUncertainty =         [0.002, 0.002,  0.001,  0.005]
+        SuperCalCorrection =    [0.0,   0.0,    0.0,    0.0]
+        FilterUncertainty =     [0.6,   0.6,    0.6,    0.6]
+        CentralWavelength =     [481,   644,    781,    913]
 
 # All uncertainties taken from Betoule et. al. 2014 and Scolnic et. al. 2018
     [ CovarianceMatrix.Instrument.SNLS ]
@@ -27,12 +27,12 @@
         FilterUncertainty =     [0.7,   0.6,    0.6,    0.6,    0.6]
         CentralWavelength =     [355,   487,    617,    748,    893]
 
-    #[ CovarianceMatrix.Instrument.Standard ]
-    #    Filters =               ["U",   "B",    "V",    "R",    "I"]
-    #    ZPUncertainty =         [0.1,   0.015,  0.015,  0.015,  0.015]
-    #    SuperCalCorrection =    [0.0,   0.033,  0.004,  0.0,    -0.007]
-    #    FilterUncertainty =     [2.5,   1.2,    1.2,    1.2,    1.2]
-    #    CentralWavelength =     [360,   436,    454,    720,    820]
+    [ CovarianceMatrix.Instrument.Standard ]
+        Filters =               ["U",   "B",    "V",    "R",    "I"]
+        ZPUncertainty =         [0.1,   0.015,  0.015,  0.015,  0.015]
+        SuperCalCorrection =    [0.0,   0.033,  0.004,  0.0,    -0.007]
+        FilterUncertainty =     [2.5,   1.2,    1.2,    1.2,    1.2]
+        CentralWavelength =     [360,   436,    454,    720,    820]
 
     [ CovarianceMatrix.Instrument.CfA3S ]
         Filters =               ["U",  "B",    "V",    "R",    "I"]
