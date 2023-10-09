@@ -1,0 +1,508 @@
+ANCHORS_LCFIT:
+  MINOS_ON: &minos_on
+     USE_MINOS: T
+
+  OPT_SNLCINP: &opt_snlcinp
+     OPT_SETPKMJD: 20
+     RV_MWCOLORLAW: 3.1
+     OPT_MWCOLORLAW: 99
+     OPT_MWEBV: 3
+     MWEBV_SCALE: 1.0
+     MWEBV_SHIFT: 0.0
+     SNTABLE_LIST: 'FITRES(text:host)'
+     cutwin_Trestmin: -9999.0   5.0
+     cutwin_Trestmax: 5.   99999.
+     ROOTFILE_OUT: 'ROOTFILE.ROOT'
+
+  OPT_FITINP: &opt_fitinp
+     PRIOR_SHAPE_RANGE: -6.0, 6.0
+     FITWIN_SHAPE: -5.0, +5.0
+     FITWIN_COLOR: -0.5, +0.5
+     FITWIN_PROB:  0.0,  1.01
+     FITWIN_TREST:  -15.0, 45.0
+  
+  S3FIT: &s3fit
+     FITMODEL_NAME: '$DES_ROOT/SALT3training/OUT_TRAIN_SALT3_systCovar_unoU/SALT3.MODEL000'
+     RESTLAMBDA_FITRANGE: 3500.0 8000.0
+
+  APPENDFITRES_DES: &appendfitres_des
+     APPEND_TABLE_VARLIST: RA DEC HOST_ANGSEP TGAPMAX TrestMIN TrestMAX FLUXCALMAX_g SNRMAX_g FLUXCALMAX_r SNRMAX_r FLUXCALMAX_i SNRMAX_i FLUXCALMAX_z SNRMAX_z
+
+  APPENDFITRES: &appendfitres
+     APPEND_TABLE_VARLIST: TGAPMAX TrestMIN TrestMAX
+
+ALIAS:
+  COSMOLOGY: &cosmology
+    OMEGA_MATTER: __om__
+    OMEGA_LAMBDA: __ol__ 
+    w0_LAMBDA:    __w__
+    wa_LAMBDA:        0
+    H0:            70.0
+
+  FOUNDKCOR: &foundkcor
+    KCOR_FILE: $SNDATA_ROOT//kcor/Pantheon+/calib_Pantheon+_Foundation.fits
+  LOWZKCOR: &lowzkcor
+     KCOR_FILE: $DES_ROOT//kcor/DES5YR_LOWZ_COMBINED/kcor_DES5YR_LOWZ_COMBINED.fits
+  DESKCOR: &deskcor
+     KCOR_FILE: $PS1MD_USERS/dscolnic/PANTHEON+/kcor/v6_1/kcor_DES_5yr_v6_1.fits
+
+  DCR_CORRECTIONS: &dcr_corrections
+     MAGCOR_FILE: '$DES5YR/test_mag_corrections/ALL_MAG_CORRECTIONS.DAT'
+
+  OVERRIDES: &overrides
+    HEADER_OVERRIDE_FILE: '/project2/rkessler/SURVEYS/DES/USERS/mvincenzi//update_data_files/override_LOWZ_hostgal_complete_ur.dat, /project2/rkessler/SURVEYS/DES/USERS/mvincenzi//update_data_files/override_DES_hostgal_complete_ur.dat'  
+
+  BBC4D_SIGINT_COLOR: &bbc4d_sigint_color
+    opt_biascor: 4336
+    u2: 3
+    nbin_logmass: 2
+    sig1: 0.01
+
+  BBC4D_FLATSIGINT: &bbc4d_flatsigint
+    opt_biascor: 240
+    u2: 3
+    nbin_logmass: 2
+    sig1: 0.1
+
+  BBC_GENERAL: &bbc_general
+    interp_biascor_logmass: 0
+    logmass_min: -15
+    logmass_max: 35
+    ndump_nobiascor: 500
+    u5: 1 #fit for mass step
+    p5: 0.00001 # same value as sims basically
+    p8: 0.001
+    iflag_duplicate: 0
+    ndump_nobiascor: 500
+    fitflag_sigmb: 2
+    fieldGroup_biascor: X3,C3,X1+X2,S1+S2,E1+E2+C1+C2
+    p1: 0.150 # same value as sims
+    p2: 2.87
+    CUTWIN_cERR: 0 1.5
+    CUTWIN_FITPROB: 0.001 1.1
+    p9: 0.685
+    p10: 0.0
+    p11: -1.0
+    p12: 0.0    
+    surveygroup_biascor: 'CFA1+CFA2+CFA3S+CFA3K+CFA4p1+CFA4p2+CSP(zbin=0.02),FOUNDATION(zbin=0.02),DES(zbin=0.075)'
+    zmin: 0.025
+    cid_reject_file: /project2/rkessler/SURVEYS/DES/ROOT/analysis_photoIa_5yr/base/exclude_SN_zSN.txt
+
+  APPLY_CHI2MAX: &apply_chi2max
+    chi2max: 16
+
+  NO_CHI2MAX: &no_chi2max
+    chi2max: 10000000
+
+  PERFECT_CLASS: &perfect_class
+    CLASSIFIER: PerfectClassifier
+    MODE: predict
+    OPTS:
+      PROB_IA: 0.999
+      PROB_CC: 0.001
+
+
+  APPEND_GALPROP: &append_galprop
+    APPEND_TABLE_TEXTFILE: "/project2/rkessler/SURVEYS/DES/USERS/mvincenzi//update_data_files/override_DES_hostgal_complete_ur_HACKCOLUMN.dat"
+
+  S3MODEL: &s3model 
+    GENMODEL: __saltmodel____n__ 
+
+  SYSOFFSET: &sysoffset
+    GENMAG_OFF_ZP: __zp_offset____n__
+    GENMAG_OFF_MODEL: __mag_offset____n__
+
+  DES_GENPDFP21DEC2022: &des_genpdfp21dec2022
+    BASE: $DES5YR/base/des/sims_ia/sn_ia_salt_des5yr.input
+    GENPDF_FILE: $DES5YR/populations/FINAL_forDES5yr/DES5YR_S3P21pLDec2022_GENPDF.DAT
+  P21_INPUTS: &p21_inputs
+    GENMAG_SMEAR_MODELNAME: C11
+    GENMAG_SMEAR_SCALE: 0.0001
+    GENMAG_SMEAR_SCALE(c): 0,0
+    GENMAG_OFF_GLOBAL: -0.12
+    GENPDF_OPTMASK: 1
+  SIMALPHA: &simalpha
+    GENPEAK_SALT2ALPHA: 0.15
+  HOST_HQSEDFIT: &host_hqsedfit
+    HOSTLIB_SCALE_PROPERTY_ERR: 0.0(LOGMASS),0.0(LOGSFR),0.0(LOGsSFR),0.0(COLOR)
+    HOSTLIB_MSKOPT: 258  # 2=Poisson noise
+#    HOSTLIB_FILE: /project2/rkessler/SURVEYS/DES/USERS/helenqu/pippin_config/des/hostlib+hostnbr/sullivan_params.HOSTLIB
+#    SEARCHEFF_zHOST_FILE:  $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/MV_HOSTeff_perField_perYear_obsgr.dat
+    HOSTLIB_FILE: $SNDATA_ROOT/simlib/DES/DES-SN5YR_DES.HOSTLIB
+
+    SEARCHEFF_zHOST_FILE:  $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/MV_HOSTeff_perField_perYear_obsgr_HQ.dat
+    DNDZ: POWERLAW 2.27E-5 1.7 ##Frohmaier 2018
+    HOSTLIB_WGTMAP_FILE: $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/WGT_maps_DESX3/DES_WGTMAP_MassSFR_Wiseman2021.HOSTLIB
+  BIASCOR_MEDIUMSIZE: &biascor_mediumsize
+    NGEN_UNIT: 31
+    RANSEED_REPEAT: 37 23475
+    BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 47
+    BATCH_MEM: 8000
+  MWOPT: &mwopt
+    RV_MWCOLORLAW: 3.1
+    OPT_MWCOLORLAW: 99
+    OPT_MWEBV: 3
+  FOUND_GENERAL: &found_general
+    BASE: $DES5YR/base/foundation/sims_ia/sn_ia_salt_found.input
+    HOSTLIB_WGTMAP_FILE: $DES5YR/populations/FINAL_forDES5yr/FOUND.WGT
+    GENPDF_OPTMASK: 1
+    GENSIGMA_VPEC:   300
+    VPEC_ERR:      270
+    GENFILTERS: griz
+    GENRANGE_REDSHIFT:  0.007   0.11
+  HOST_LOWZ: &host_lowz
+    HOSTLIB_FILE: $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/LOWZ+LOGMASS_LOGSFR_ur_Sullivan10.HOSTLIB
+    HOSTLIB_SCALE_PROPERTY_ERR: 0.0(LOGMASS),0.0(LOGSFR),0.0(LOGsSFR),0.0(COLOR)
+    HOSTLIB_MSKOPT: 258
+  FOUND_GENPDFP21: &found_genpdfp21
+    GENPDF_FILE: $DES5YR/populations/FINAL_forDES5yr/FOUND_S3P21pL_GENPDF_NEW.DAT
+  LOWZ_GENERAL: &lowz_general
+    BASE: $DES5YR/base/lowz/sims_ia/sn_ia_salt_lowz.input
+    HOSTLIB_WGTMAP_FILE: $DES5YR/populations/FINAL_forDES5yr/LOWZ.WGT
+    GENPDF_OPTMASK: 1
+    GENSIGMA_VPEC:  300
+    VPEC_ERR:     270
+    GENRANGE_REDSHIFT:  0.007   0.0999
+  LOWZ_GENPDFP21: &lowz_genpdfp21
+    GENPDF_FILE: $DES5YR/populations/FINAL_forDES5yr/LOWZ_S3P21pL_GENPDF_NEW.DAT
+  HOST_CC: &host_cc
+    HOSTLIB_SCALE_PROPERTY_ERR: 0.0(LOGMASS),0.0(LOGSFR),0.0(LOGsSFR),0.0(COLOR)
+    HOSTLIB_MSKOPT: 258  # 2=Poisson noise
+    HOSTLIB_FILE: $SNDATA_ROOT/simlib/DES/DES-SN5YR_DES.HOSTLIB
+    SEARCHEFF_zHOST_FILE:  $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/MV_HOSTeff_perField_perYear_obsgr_HQ.dat
+  BIASCOR_CCSIZE: &biascor_ccsize
+    FORMAT_MASK: 48
+    RESET_CIDOFF: 2
+    NGEN_UNIT: 10
+    RANSEED_REPEAT: 20 23475
+    BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 20
+  DATASIM_SIZE: &datasim_size
+    NGEN_UNIT: 1
+    RANSEED_CHANGE: 25 23475
+    BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 25
+    BATCH_MEM: 8000
+
+SIM:
+    DESSIMBIAS_4D_P21__n__:
+        IA_P21:
+            <<: *des_genpdfp21dec2022
+            <<: *s3model
+            <<: *sysoffset
+            <<: *p21_inputs
+            <<: *simalpha
+            <<: *host_hqsedfit
+            FLUXERRMODEL_FILE: $DES_ROOT/starterKits/make_fluxerr_model/OUT_SMP/FLUXERRMODEL_SIM.DAT
+            GENMAG_SMEAR_ADDPHASECOR: 0.0 10.0
+            <<: *deskcor
+        GLOBAL:
+            <<: *biascor_mediumsize
+            <<: *cosmology
+            <<: *mwopt
+
+    FOUNDSIMBIAS_4D_P21__n__:
+        IA_P21:
+          <<: *found_general
+          <<: *s3model
+          <<: *p21_inputs
+          <<: *simalpha
+          <<: *host_lowz
+          <<: *found_genpdfp21
+          <<: *foundkcor
+        GLOBAL:
+          <<: *biascor_mediumsize
+          <<: *cosmology
+          <<: *mwopt
+
+    LOWZSIMBIAS_4D_P21__n__:
+        IA_P21:
+          <<: *lowz_general
+          <<: *s3model
+          <<: *p21_inputs
+          <<: *simalpha
+          <<: *host_lowz
+          <<: *lowz_genpdfp21
+          <<: *lowzkcor
+        GLOBAL:
+          <<: *biascor_mediumsize
+          <<: *cosmology
+          <<: *mwopt
+
+    DESSIMBIAS_CCPRIOR:
+        PECIAX:
+          BASE: $DES5YR/base/des/sims_cc/sn_iax_dust.input
+          HOSTLIB_WGTMAP_FILE:  $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/WGT_maps_SVAUR/DES_WGTMAP_MassSFR_Iax_Sullivan2006.HOSTLIB
+        PECIA91BG:
+          BASE: $DES5YR/base/des/sims_cc/sn_ia91bg.input
+          HOSTLIB_WGTMAP_FILE:  $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/WGT_maps_SVAUR/DES_WGTMAP_MassSFR_91bg_Sullivan2006.HOSTLIB
+        II_TEMPLATES:
+          BASE: $DES_USERS/mvincenzi/MYPIPPIN/sims_cc_revised_maria/sn_ii_v19_li11revised_nodust.input
+          DNDZ: MD14 16.8E-05   # three times normal rate
+          HOSTLIB_WGTMAP_FILE:  $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/WGT_maps_SVAUR/DES_WGTMAP_Mass_TypeII.HOSTLIB
+        Ibc_TEMPLATES:
+          BASE: $DES_USERS/mvincenzi/MYPIPPIN/sims_cc_revised_maria/sn_ibc_v19_li11revised_nodust.input
+          DNDZ: MD14 7.2E-05  # three times normal rate
+          HOSTLIB_WGTMAP_FILE:  $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/WGT_maps_SVAUR/DES_WGTMAP_Mass_TypeSE.HOSTLIB
+        GLOBAL:
+          <<: *host_cc
+          <<: *deskcor
+          FLUXERRMODEL_FILE: $DES_ROOT/starterKits/make_fluxerr_model/OUT_SMP/FLUXERRMODEL_SIM.DAT
+          GENMAG_SMEAR_ADDPHASECOR: 0.0 10.0
+          <<: *biascor_ccsize
+          <<: *cosmology
+          <<: *mwopt
+
+    DATALOWZSIM_4D_P21__n__:
+        IA_P21:
+          <<: *lowz_general
+          <<: *s3model
+          <<: *p21_inputs
+          <<: *simalpha
+          <<: *host_lowz
+          <<: *lowz_genpdfp21
+          <<: *lowzkcor
+        GLOBAL:
+          <<: *datasim_size
+          <<: *cosmology
+          <<: *mwopt
+    DATAFOUNDSIM_4D_P21__n__:
+        IA_P21:
+          <<: *found_general
+          <<: *s3model
+          <<: *p21_inputs
+          <<: *simalpha
+          <<: *host_lowz
+          <<: *found_genpdfp21
+          <<: *foundkcor
+        GLOBAL:
+          <<: *datasim_size
+          <<: *cosmology
+          <<: *mwopt
+
+    DATADESSIM_4D_P21__n__:
+        IA_P21:
+          <<: *des_genpdfp21dec2022
+          <<: *s3model
+          <<: *sysoffset
+          <<: *p21_inputs
+          <<: *simalpha
+          <<: *host_hqsedfit
+          FLUXERRMODEL_FILE: $DES_ROOT/starterKits/make_fluxerr_model/OUT_SMP/FLUXERRMODEL_SIM.DAT
+          GENMAG_SMEAR_ADDPHASECOR: 0.0 10.0
+          <<: *deskcor
+        GLOBAL:
+          <<: *datasim_size
+          <<: *cosmology
+          <<: *mwopt
+
+    DATADESSIM_CC:
+        PECIAX:
+          BASE: $DES5YR/base/des/sims_cc/sn_iax_dust.input
+          HOSTLIB_WGTMAP_FILE:  $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/WGT_maps_SVAUR/DES_WGTMAP_MassSFR_Iax_Sullivan2006.HOSTLIB
+        PECIA91BG:
+          BASE: $DES5YR/base/des/sims_cc/sn_ia91bg.input
+          HOSTLIB_WGTMAP_FILE:  $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/WGT_maps_SVAUR/DES_WGTMAP_MassSFR_91bg_Sullivan2006.HOSTLIB
+          GENRANGE_AV: 0.0001 0.002
+          GENTAU_AV: 1.0
+          GENSIG_AV: 0.001
+          GENRATIO_AV0: 1.
+          GENPEAK_RV: 3.1
+          GENRANGE_RV: 3.0 3.2
+        II_TEMPLATES:
+          BASE: $DES_USERS/mvincenzi/MYPIPPIN/sims_cc_revised_maria/sn_ii_v19_li11revised_nodust.input
+          DNDZ: MD14 16.8E-05   # three times normal rate
+          HOSTLIB_WGTMAP_FILE:  $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/WGT_maps_SVAUR/DES_WGTMAP_Mass_TypeII.HOSTLIB
+          GENRANGE_AV: 0.0001 0.002
+          GENTAU_AV: 1.0
+          GENSIG_AV: 0.001
+          GENRATIO_AV0: 1.
+          GENPEAK_RV: 3.1
+          GENRANGE_RV: 3.0 3.2
+        Ibc_TEMPLATES:
+          BASE: $DES_USERS/mvincenzi/MYPIPPIN/sims_cc_revised_maria/sn_ibc_v19_li11revised_nodust.input
+          DNDZ: MD14 7.2E-05  # three times normal rate
+          HOSTLIB_WGTMAP_FILE:  $DES_USERS/mvincenzi/MYPIPPIN/sims_instrument/WGT_maps_SVAUR/DES_WGTMAP_Mass_TypeSE.HOSTLIB
+          GENRANGE_AV: 0.0001 0.001
+          GENTAU_AV: 1.0
+          GENSIG_AV: 0.001
+          GENRATIO_AV0: 1.
+          GENPEAK_RV: 3.1
+          GENRANGE_RV: 3.0 3.2
+        GLOBAL:
+          <<: *host_cc
+          FLUXERRMODEL_FILE: $DES_ROOT/starterKits/make_fluxerr_model/OUT_SMP/FLUXERRMODEL_SIM.DAT
+          GENMAG_SMEAR_ADDPHASECOR: 0.0 10.0
+          <<: *cosmology
+          <<: *mwopt
+          <<: *deskcor
+          <<: *datasim_size
+
+LCFIT:
+  Lsys__n__:
+    BASE: $DES5YR/base/lowz/lcfit_nml/lowz_fordes5yr.nml
+    MASK: DATALOWZSIM_4D_P21__n__
+    SNLCINP:
+      <<: *opt_snlcinp
+      <<: *lowzkcor
+      <<: *minos_on
+      <<: *overrides
+    FITOPTS:
+      - $DES5YR/base/fitopts_s3noU.yml
+    FITINP:
+      <<: *opt_fitinp
+      <<: *s3fit
+    OPTS:
+      <<: *appendfitres
+      OPT_SNCID_LIST: 1
+      BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 10
+
+  Dsys__n__:
+    BASE: $DES5YR/base/des/lcfit_nml/desSMP_5yr.nml
+    MASK: DATADESSIM_4D_P21__n__
+    SNLCINP:
+      <<: *opt_snlcinp
+      <<: *deskcor
+      FLUXERRMODEL_FILE: '$DES_ROOT/starterKits/make_fluxerr_model/OUT_SMP/FLUXERRMODEL_FAKE.DAT'
+      <<: *dcr_corrections
+      <<: *minos_on
+      <<: *overrides
+    FITOPTS:
+      - $DES5YR/base/fitopts_s3noU.yml
+    FITINP:
+      <<: *opt_fitinp
+      <<: *s3fit
+    OPTS:
+      <<: *append_galprop
+      <<: *appendfitres_des
+      OPT_SNCID_LIST: 1
+      BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2a.TEMPLATE 50
+
+  Fsys__n__:
+    BASE: $DES5YR/base/foundation/lcfit_nml/found_des5yr.nml
+    MASK: DATAFOUNDSIM_4D_P21__n__
+    SNLCINP:
+      <<: *opt_snlcinp
+      <<: *foundkcor
+      <<: *minos_on
+      <<: *overrides
+    FITOPTS:
+      - $DES5YR/base/fitopts_s3noU.yml
+    FITINP:
+      <<: *opt_fitinp
+      FILTLIST_FIT: 'griz'
+      <<: *s3fit
+    OPTS:
+      <<: *appendfitres
+      OPT_SNCID_LIST: 1
+      BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 10
+
+  L3__n__:
+    BASE: $DES5YR/base/lowz/lcfit_nml/lowz_fordes5yr.nml
+    MASK: LOWZSIMBIAS_4D_P21__n__
+    SNLCINP:
+      <<: *opt_snlcinp
+      <<: *minos_on
+      <<: *lowzkcor
+    FITINP:
+      <<: *opt_fitinp
+      <<: *s3fit
+    OPTS:
+      <<: *appendfitres
+      BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 40
+
+  F3__n__:
+    BASE: $DES5YR/base/foundation/lcfit_nml/found_des5yr.nml
+    MASK: FOUNDSIMBIAS_4D_P21__n__
+    SNLCINP:
+      <<: *opt_snlcinp
+      <<: *minos_on
+      <<: *foundkcor
+    FITINP:
+      <<: *opt_fitinp
+      FILTLIST_FIT: 'griz'
+      <<: *s3fit
+    OPTS:
+      <<: *appendfitres
+      BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 40
+
+  D3__n__:
+    BASE: $DES5YR/base/des/lcfit_nml/desSMP_5yr.nml
+    MASK: DESSIMBIAS_4D_P21__n__
+    SNLCINP:
+      <<: *opt_snlcinp
+      <<: *minos_on
+      <<: *deskcor
+    FITINP:
+      <<: *opt_fitinp
+      <<: *s3fit
+    OPTS:
+      <<: *appendfitres_des
+      BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 95
+
+  D3:
+    BASE: $DES5YR/base/des/lcfit_nml/desSMP_5yr.nml
+    MASK: DESSIMBIAS_CCPRIOR
+    SNLCINP:
+      <<: *opt_snlcinp
+      <<: *minos_on
+      <<: *deskcor
+    FITINP:
+      <<: *opt_fitinp
+      <<: *s3fit
+    OPTS:
+      <<: *appendfitres_des
+      BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 95
+
+
+CLASSIFICATION:
+  SNNTESTV19_z:
+    MASK: DESSIMBIAS
+    <<: *perfect_class
+
+AGGREGATION:
+  AGG:
+      
+MERGE:
+  MERGE:
+
+
+BIASCOR:
+  P21NOM_SIM__n__:
+    BASE: $DES5YR/base/SALT2mu_5yr.input
+    DATA: [ Lsys__n___DATALOWZSIM_4D_P21__n__, Dsys__n___DATADESSIM_4D_P21__n__, Fsys__n___DATAFOUNDSIM_4D_P21__n__]
+    SIMFILE_BIASCOR: [L3__n___LOWZSIMBIAS_4D_P21__n__, D3__n___DESSIMBIAS_4D_P21__n__, F3__n___FOUNDSIMBIAS_4D_P21__n__]
+    SIMFILE_CCPRIOR: D3_DESSIMBIAS_CCPRIOR
+    CLASSIFIER: SNNTESTV19_z
+    CONSISTENT_SAMPLE: True
+    OPTS:
+      BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 80
+      BATCH_MEM: 32000
+      <<: *bbc4d_sigint_color
+      <<: *bbc_general
+      <<: *apply_chi2max
+
+CREATE_COV:
+  COV_SIM:
+    MASK: P21NOM_SIM
+    OPTS:
+      BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2a.TEMPLATE 25
+      SUBTRACT_VPEC: False
+      BATCH_MEM: 16GB
+      BATCH_WALLTIME: 05:00:00
+      BINNED: False
+      SYSTEMATIC_HD: True
+
+COSMOFIT:
+  WFIT:
+    SN_NOPRIOR_OMW_SIM:
+      MASK: COV_SIM
+      OPTS:
+        BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 90
+        WFITOPTS:
+          - /omw_nopri/ -wsteps 401 -ommin 0.0 -ommax 1.0 -omsteps 401 -speed_flag_chi2 2 -ompri 0.315 -dompri 10
+
+    SN_CMB_OMW_SIM:
+      MASK: COV_SIM
+      OPTS:
+        BATCH_INFO: sbatch $SBATCH_TEMPLATES/SBATCH_Midway2b.TEMPLATE 90
+        WFITOPTS:
+          - /cmb18_pri/ -cmb_sim -sigma_Rcmb 0.0057 -speed_flag_chi2 2 -wsteps 401 -ommin 0.2 -ommax 0.4 -omsteps 401 -hmin 40

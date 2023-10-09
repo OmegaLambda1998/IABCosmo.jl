@@ -6,8 +6,9 @@
 <include DESJacobian.toml>
 
 [ sim ]
-    num_sims = 2
-    pippin_template = "PA_DESForwardModel.yml"
+    seed = 0
+    num_sims = 1
+    pippin_template = "pa_desforwardmodel.yml"
 
     [ sim.draw ] # Options for drawing from JLACovarianceMatrix
         SURVEY_LIST_SAMEMAGSYS = ["CFA3", "OTHER", "CALAN_TOLOLO"] 
