@@ -3,7 +3,6 @@ module RunModule
 # External Packages
 using JLACovarianceMatrix
 using SALTJacobian
-using Random
 
 # Internal Packages
 include("SimulatorModule.jl")
@@ -46,9 +45,6 @@ function get_jacobian(toml::Dict{String,Any})
 end
 
 function run_IABCosmo(toml::Dict{String,Any})
-    if "SEED" in keys(toml)
-        Random.seed!(toml["SEED"])
-    end
     covariance_matrix = get_covariance_matrix(toml)
     jacobian = get_jacobian(toml)
     simulator = Simulator(toml["SIM"], covariance_matrix, jacobian, toml["GLOBAL"])

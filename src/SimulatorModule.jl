@@ -1,11 +1,12 @@
 # Simulator Module
 module SimulatorModule
 
-# Internal Packages 
+# External Packages 
 using OrderedCollections
 using YAML
+using Random
 
-# External Packages 
+# Internal Packages 
 using JLACovarianceMatrix
 using SALTJacobian
 
@@ -212,6 +213,9 @@ function save_pippin_template(pippin_template::OrderedDict{String,Any}, output::
 end
 
 function Simulator(config::Dict{String,Any}, covariance_matrix::CovarianceMatrix, jacobian::Jacobian, global_config::Dict{String,Any})
+    if "SEED" in keys(config)
+        Random.seed!(config["SEED"])
+    end
     pippin_template_input = config["PIPPIN_TEMPLATE"]
     if !isabspath(pippin_template_input)
         pippin_template_input = joinpath(global_config["BASE_PATH"], pippin_template_input)
